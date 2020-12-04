@@ -31,3 +31,9 @@ test('find product of 3 numbers', () => {
   ]
   expect(findProductOf2020SumOfThreeNumbers(input)).toBe(241861950)
 })
+
+
+test('part 2 input: find product of 3 numbers', () => {
+  const input = readFileInputByLines('day1_puzzle.txt').map(l => parseInt(l));
+  expect(findProductOf2020SumOfThreeNumbers(input)).toBe(276912720)
+})
