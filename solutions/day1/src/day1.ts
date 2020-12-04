@@ -1,6 +1,3 @@
-import { readFileSync } from 'fs';
-import path from 'path';
-
 export function findProductOf2020Sum(vals: number[]): number {
     const VALUE_TO_SUM_TO = 2020;
     const sumPairs = new Map<number, number>()
