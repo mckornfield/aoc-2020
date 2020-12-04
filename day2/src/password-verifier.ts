@@ -1,5 +1,3 @@
-import { match } from "assert";
-
 export function isPasswordValid(input: string): boolean {
     const { minimumCount, maximumCount, password, requiredChar } = parseInput(input);
     const requiredCharOccurences = password.split(requiredChar).length - 1
