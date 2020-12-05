@@ -78,5 +78,5 @@ test('multiply numbers', () => {
 test('part 2, multiply different slope options together', () => {
     const grid = parseGridInput(puzzleGridInput);
     const multipliedValues = moveThroughGridForSlopesAndMultiply(grid, slopes);
-    expect(multipliedValues).toBe(5)
+    expect(multipliedValues).toBe(9354744432)
 })
