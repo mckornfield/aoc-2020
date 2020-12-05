@@ -1,3 +1,6 @@
+import { match } from "assert";
+import { exception } from "console";
+
 const requiredKeys = [
     "byr:",
     "iyr:",
@@ -8,6 +11,45 @@ const requiredKeys = [
     "pid:",
     // "cid",
 ]
+
+export const validateKeyValuePair = (keyValuePair: string) => {
+    const [key, value] = keyValuePair.split(':');
+    switch (key) {
+        case ('byr'):
+            const birthYear = parseInt(value);
+            return birthYear >= 1920 && birthYear <= 2002
+
+        case ('iyr'):
+            const issueYear = parseInt(value);
+            return issueYear >= 2010 && issueYear <= 2020
+        case ('eyr'):
+            const expirationYear = parseInt(value);
+            return expirationYear >= 2020 && expirationYear <= 2030
+        case ('hgt'):
+            const regex = /(\d+)(\w+)/;
+            const matchResult = value.match(regex)
+
+            if (!matchResult) {
+                return false;
+            }
+            const numSegment = parseInt(matchResult[1])
+            const unitSegment = matchResult[2]
+            if (unitSegment == "cm") {
+                return numSegment >= 150 && numSegment <= 193;
+            } else if (unitSegment == "in") {
+                return numSegment >= 59 && numSegment <= 76;
+            }
+            return false;
+        case ('hcl'):
+            return value.length == 7 && /#[1-9a-f]{6}/.test(value);
+        case ('ecl'):
+            const eyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
+            return eyeColors.includes(value)
+        case ('pid'):
+            return value.length == 9 && /\d{9}/.test(value)
+    }
+    return false;
+}
 
 export function countValidPassports(passportStrBlocks: string): number {
     let currentPassportSegments = [];
@@ -26,6 +68,16 @@ export function countValidPassports(passportStrBlocks: string): number {
         }
     }
     return count;
+}
+
+const NUM_REQUIRED_CHECKS = 7;
+export function isPassportValidPt2(passportStr: string): boolean {
+
+    const validChecks = passportStr.split(/\s+/).filter(
+        validateKeyValuePair
+    ).length
+    return validChecks == NUM_REQUIRED_CHECKS;
+
 }
 
 export function isPassportValid(passportStr: string): boolean {
