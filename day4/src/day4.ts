@@ -41,7 +41,7 @@ export const validateKeyValuePair = (keyValuePair: string) => {
             }
             return false;
         case ('hcl'):
-            return value.length == 7 && /#[1-9a-f]{6}/.test(value);
+            return value.length == 7 && /#[0-9a-f]{6}/.test(value);
         case ('ecl'):
             const eyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
             return eyeColors.includes(value)
@@ -54,13 +54,28 @@ export const validateKeyValuePair = (keyValuePair: string) => {
 export function countValidPassports(passportStrBlocks: string): number {
     let currentPassportSegments = [];
     let count = 0;
-    // console.log(passportStrBlocks)
     for (const line of passportStrBlocks.split('\n')) {
         if (line.includes(':')) {
             currentPassportSegments.push(line);
         } else {
-            // console.log(currentPassportSegments)
             const isValid = isPassportValid(currentPassportSegments.join(' '))
+            if (isValid) {
+                count += 1;
+            }
+            currentPassportSegments = []
+        }
+    }
+    return count;
+}
+
+export function countValidPassportsPt2(passportStrBlocks: string): number {
+    let currentPassportSegments = [];
+    let count = 0;
+    for (const line of passportStrBlocks.split('\n')) {
+        if (line.includes(':')) {
+            currentPassportSegments.push(line);
+        } else {
+            const isValid = isPassportValidPt2(currentPassportSegments.join(' '))
             if (isValid) {
                 count += 1;
             }
@@ -76,13 +91,16 @@ export function isPassportValidPt2(passportStr: string): boolean {
     const validChecks = passportStr.split(/\s+/).filter(
         validateKeyValuePair
     ).length
+    // console.log(validChecks)
+    // if (validChecks == 6) {
+    // console.log(`6 Checks for ${passportStr}`)
     return validChecks == NUM_REQUIRED_CHECKS;
 
 }
 
 export function isPassportValid(passportStr: string): boolean {
     for (let key of requiredKeys) {
-        if (!passportStr.includes(key)) {
+        if (passportStr.split(key).length != 2) {
             return false;
         }
     }
