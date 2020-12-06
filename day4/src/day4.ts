@@ -1,6 +1,3 @@
-import { match } from "assert";
-import { exception } from "console";
-
 const requiredKeys = [
     "byr:",
     "iyr:",
