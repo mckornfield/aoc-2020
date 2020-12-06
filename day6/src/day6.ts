@@ -6,6 +6,18 @@ export function determineAnswerCount(inputStr: string) {
     return uniqueChars.size
 }
 
+export function determineAnswerCountPt2(inputs: string[]) {
+    const allAnsweredSet = inputs.map(input => new Set(input.split('')))
+        .reduce((oneSet, otherSet) => {
+            return new Set([...oneSet].filter(item => otherSet.has(item)))
+        })
+
+    allAnsweredSet.delete('\r')
+    allAnsweredSet.delete('\n')
+    allAnsweredSet.delete(' ')
+    return allAnsweredSet.size
+}
+
 export function determineAnswerCountForList(inputs: string[]) {
     let answerInput = '';
     let count = 0;
@@ -19,5 +31,21 @@ export function determineAnswerCountForList(inputs: string[]) {
     }
     // Final count
     count += determineAnswerCount(answerInput);
+    return count;
+}
+
+export function determineAnswerCountForListPt2(inputs: string[]) {
+    let answerInput = [];
+    let count = 0;
+    for (const line of inputs) {
+        if (line && line.length > 0 && line.trim().length > 0) {
+            answerInput.push(line);
+        } else {
+            count += determineAnswerCountPt2(answerInput);
+            answerInput = [];
+        }
+    }
+    // Final count
+    count += determineAnswerCountPt2(answerInput);
     return count;
 }
