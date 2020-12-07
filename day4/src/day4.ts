@@ -88,9 +88,6 @@ export function isPassportValidPt2(passportStr: string): boolean {
     const validChecks = passportStr.split(/\s+/).filter(
         validateKeyValuePair
     ).length
-    // console.log(validChecks)
-    // if (validChecks == 6) {
-    // console.log(`6 Checks for ${passportStr}`)
     return validChecks == NUM_REQUIRED_CHECKS;
 
 }
