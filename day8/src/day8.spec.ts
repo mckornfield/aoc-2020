@@ -1,5 +1,5 @@
 import { readFileInputByLinesSkipLastLine } from '../../reader/src/main';
-import { OperationType, Direction, parseLine, advanceStateMachineAndReturnAccValue } from './day8'
+import { OperationType, Direction, parseLine, advanceStateMachineAndReturnAccValue, permuteStateOperationsUntilSuccessfulRun } from './day8'
 describe('parse line', () => {
 
     test.each([
@@ -49,5 +49,22 @@ test('pt 1', () => {
 })
 
 test('flip jmps to nops and find accumulated value', () => {
-    
+    const stateInput = `nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6`
+    expect(permuteStateOperationsUntilSuccessfulRun(stateInput.split('\n'))).toBe(8)
+
+
+})
+
+
+test('pt 2 baby', () => {
+    const stateInput = readFileInputByLinesSkipLastLine('day8');
+    expect(permuteStateOperationsUntilSuccessfulRun(stateInput)).toBe(758)
 })

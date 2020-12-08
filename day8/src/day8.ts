@@ -68,10 +68,35 @@ export function advanceStateMachineAndReturnAccValue(input: string[]): number {
 }
 
 
-export function runStateMachine(input: string[]): number {
+interface StateMachineRun {
+    acc: number,
+    programCompletedNormally: boolean,
+}
+
+export function permuteStateOperationsUntilSuccessfulRun(input: string[]): number {
+    const instructions = input.map(parseLine);
+    for (let i = 0; i < instructions.length; i++) {
+        const { type, direction, quantity } = instructions[i];
+        if (type == OperationType.Accumulate) {
+            continue; // Don't permute accumulate indices
+        }
+        const permutedInstructions = [...instructions];
+        permutedInstructions[i] = {
+            type: type == OperationType.Jump ? OperationType.Noop : OperationType.Jump,
+            direction,
+            quantity
+        }
+        const result = runStateMachine(permutedInstructions)
+        if (result.programCompletedNormally) {
+            return result.acc;
+        }
+    }
+    throw new Error("Could not permute program to work")
+}
+
+export function runStateMachine(instructions: Operation[]): StateMachineRun {
     let acc = 0;
     const visitedInstructions = new Set<number>();
-    const instructions = input.map(parseLine);
     let currentIndex = 0;
     while (!visitedInstructions.has(currentIndex) && currentIndex < instructions.length) {
         visitedInstructions.add(currentIndex)
@@ -93,5 +118,8 @@ export function runStateMachine(input: string[]): number {
         }
 
     }
-    return acc;
+    return {
+        acc,
+        programCompletedNormally: instructions.length == currentIndex,
+    }
 }
