@@ -1,5 +1,4 @@
 export function determineAnswerCount(inputStr: string) {
-    // console.log(inputStr);
     const uniqueChars = new Set(inputStr.split(''))
     uniqueChars.delete('\r')
     uniqueChars.delete('\n')
