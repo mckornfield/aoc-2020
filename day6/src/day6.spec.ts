@@ -40,5 +40,5 @@ test('pt 2 count same answers from separate groups', () => {
 
 test('part 2 let count all the common answers', () => {
     const answerList = readFileInputByLines('day6');
-    expect(determineAnswerCountForListPt2(answerList)).toBe(6565);
+    expect(determineAnswerCountForListPt2(answerList)).toBe(3137);
 })

@@ -1,4 +1,5 @@
 export function determineAnswerCount(inputStr: string) {
+    // console.log(inputStr);
     const uniqueChars = new Set(inputStr.split(''))
     uniqueChars.delete('\r')
     uniqueChars.delete('\n')
@@ -22,7 +23,7 @@ export function determineAnswerCountForList(inputs: string[]) {
     let answerInput = '';
     let count = 0;
     for (const line of inputs) {
-        if (line && line.length > 0 && line.trim().length > 0) {
+        if (line) {
             answerInput += line;
         } else {
             count += determineAnswerCount(answerInput);
@@ -38,7 +39,7 @@ export function determineAnswerCountForListPt2(inputs: string[]) {
     let answerInput = [];
     let count = 0;
     for (const line of inputs) {
-        if (line && line.length > 0 && line.trim().length > 0) {
+        if (line) {
             answerInput.push(line);
         } else {
             count += determineAnswerCountPt2(answerInput);

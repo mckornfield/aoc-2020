@@ -3,7 +3,12 @@ import path from 'path';
 
 export function readFileInputByLines(fileName: string): string[] {
     return readFileInputToString(fileName)
-        .split('\n').filter(Boolean)
+        .split('\n');
+}
+export function readFileInputByLinesSkipLastLine(fileName: string): string[] {
+    const lines = readFileInputByLines(fileName);
+    lines.pop();
+    return lines;
 }
 
 export function readFileInputToString(fileName: string): string {

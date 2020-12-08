@@ -1,4 +1,7 @@
 export function isPasswordValid(input: string): boolean {
+    if (!input) {
+        return false;
+    }
     const { minimumCount, maximumCount, password, requiredChar } = parseInput(input);
     const requiredCharOccurences = password.split(requiredChar).length - 1
     return requiredCharOccurences >= minimumCount && requiredCharOccurences <= maximumCount;
@@ -6,6 +9,9 @@ export function isPasswordValid(input: string): boolean {
 
 
 export function isPasswordValidPt2(input: string): boolean {
+    if (!input) {
+        return false;
+    }
     const { minimumCount, maximumCount, password, requiredChar } = parseInput(input);
     // Caution: 1 indexing and XOR
     return (password[minimumCount - 1] == requiredChar && !(password[maximumCount - 1] == requiredChar)) ||
