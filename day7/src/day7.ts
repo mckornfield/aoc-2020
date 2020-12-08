@@ -83,17 +83,11 @@ export function buildBagDagPt2(bagRules: string): Map<string, Set<ChildWithCount
 }
 
 export function getCountFromBags(bagDag: Map<string, Set<ChildWithCount>>, currentChild: ChildWithCount, runningCount: number): number {
-
     const grandChildrenSet = bagDag.get(currentChild.bag);
-    // console.log(`running count ${currentChild.bag} ${currentChild.count} ${runningCount}`)
     if (grandChildrenSet?.size && grandChildrenSet?.size > 0) {
-        let totalCount = currentChild.count;
-        // console.log(`total starting count ${totalCount} for ${currentChild.bag}`);
-        for (const grandChild of grandChildrenSet) {
-            totalCount += getCountFromBags(bagDag, grandChild, runningCount) * currentChild.count;
-        }
-        // console.log(`total count ${totalCount} for ${currentChild.bag}`);
-        return totalCount
+        return currentChild.count + [...grandChildrenSet]
+            .map(grandChild => getCountFromBags(bagDag, grandChild, runningCount) * currentChild.count)
+            .reduce((a, b) => a + b)
     } else {
         return runningCount * currentChild.count;
     }
@@ -105,7 +99,7 @@ export function calculateNumberOfBagsContainedBy(bagRules: string, bag: string):
         bag,
         count: 1
     }
-    let count = getCountFromBags(dag, fakeStartingChild, 1) - 1; // Need to not include first count
+    let count = getCountFromBags(dag, fakeStartingChild, 1) - 1; // Need to not include the bag itself
     return count;
 }
 
