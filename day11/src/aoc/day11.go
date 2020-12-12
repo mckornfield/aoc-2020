@@ -36,6 +36,25 @@ func IterateSeats(grid Grid) Grid {
 	return newGrid
 }
 
+func IterateSeatsPt2(grid Grid, chairVisibilityMapping map[Pair][]Pair) Grid {
+	newGrid := Grid{}
+	for y := 0; y < grid.yMax(); y++ {
+		newGrid = append(newGrid, make([]string, grid.xMax()))
+		for x := 0; x < grid.xMax(); x++ {
+			adjacentSeatCount := getAdjacentOccupiedSeats(grid, x, y)
+			currentSeat := grid.get(x, y)
+			if currentSeat == "#" && adjacentSeatCount > 3 {
+				newGrid[y][x] = "L"
+			} else if currentSeat == "L" && adjacentSeatCount == 0 {
+				newGrid[y][x] = "#"
+			} else {
+				newGrid[y][x] = grid.get(x, y)
+			}
+		}
+	}
+	return newGrid
+}
+
 func IterateUntilRepeat(input string) int {
 	grid := ParseInput(input)
 	gridsNotEqual := true
@@ -80,12 +99,39 @@ func getAdjacentOccupiedSeats(grid Grid, x int, y int) int {
 	return counter
 }
 
+// This only needs to be done once, and then be a map of Pair to []int
+
+func getAdjacentVisibleSeats(grid Grid, chairMapping map[Pair][]Pair) {
+	
+	for y := 0; y < grid.yMax(); y++ {
+		for x := 0; x < grid.xMax(); x++ {
+	for i := -1; i < 2; i++ {
+		for j := -1; j < 2; j++ {
+			point := grid.get(x+i, y+j)
+			for point != "X" {
+				if point == "#" || point == "L" {
+					chairLocation := Pair{}
+					if v, ok := chairMapping[centerPoint]; ok {
+						chairMapping[centerPoint] = append(v, chairLocation)
+					} else {
+						chairMapping[centerPoint] = []Pair{chairLocation}
+					}
+					break
+				}
+			}
+		}
+	}
+}
+
+type Pair struct {
+	x, y int
+}
 type Grid [][]string
 
 func (grid Grid) get(x, y int) string {
-	// If out of range, pretend it's the floor :)
+	// If out of range, pretend it's a wall, which is an X
 	if y > len(grid)-1 || y < 0 || x > len(grid[0])-1 || x < 0 {
-		return "."
+		return "X"
 	}
 	return grid[y][x]
 }
