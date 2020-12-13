@@ -36,14 +36,14 @@ func MoveAndFindDistance(input string) int {
 			direction -= magnitude
 			break
 		}
-		for direction > 360 {
+		for direction >= 360 {
 			direction -= 360
 		}
 		for direction < 0 {
 			direction += 360
 		}
-		fmt.Println(actionAndMag)
-		fmt.Println(location)
+		// fmt.Println(actionAndMag)
+		// fmt.Println(location)
 	}
 	return int(math.Abs(float64(location.X))) + int(math.Abs(float64(location.Y)))
 
