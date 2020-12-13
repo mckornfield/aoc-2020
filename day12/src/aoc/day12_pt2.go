@@ -61,16 +61,13 @@ func (l *Location) moveTowardWaypoint(magnitude int, waypoint Location) {
 
 func (l *Location) rotateLocation(originalDirection, currentDirection int) {
 	rotation := originalDirection - currentDirection
-	// (4,1) left 90 means (1,-4)
+	// Unit circle, (1,0) East, (0,-1) South
+	// (0,1 ) North, (-1,0) West
 	if rotation == 90 || rotation == -270 {
 		l.X, l.Y = l.Y, -l.X
 	} else if rotation == -90 || rotation == 270 {
 		l.X, l.Y = -l.Y, l.X
 	} else if math.Abs(float64(rotation)) == 180 {
-		if originalDirection%180 == 0 { // Flip on X axis
-			l.X = -l.X
-		} else {
-			l.Y = -l.Y
-		}
+		l.Y, l.X = -l.Y, -l.X
 	}
 }
