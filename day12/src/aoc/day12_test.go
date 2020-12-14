@@ -23,7 +23,7 @@ func TestPartTwo(t *testing.T) {
 	assert := assert.New(t)
 	input := ReadFile(t, "day12_puzzle.txt")
 	distanceTravelled := MoveAndFindDistanceAroundWaypoint(input)
-	assert.Equal(25, distanceTravelled)
+	assert.Equal(30761, distanceTravelled)
 }
 
 func TestPartTwoSample(t *testing.T) {
@@ -34,7 +34,7 @@ F7
 R90
 F11`
 	distanceTravelled := MoveAndFindDistanceAroundWaypoint(input)
-	assert.Equal(30675, distanceTravelled)
+	assert.Equal(286, distanceTravelled)
 }
 
 func ReadFile(t *testing.T, fileName string) string {
