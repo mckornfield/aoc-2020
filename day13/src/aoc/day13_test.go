@@ -39,8 +39,8 @@ func TestPartOne(t *testing.T) {
 
 func TestPartTwoSample(t *testing.T) {
 	assert := assert.New(t)
-	input := ReadFile(t, "day13_puzzle.txt")
-	answer := FindNearestTimeStampAndBusIdProduct(input)
+	input := "7,13,x,x,59,x,31,19"
+	answer := FindFirstTimestampAllBusesWork(input)
 	assert.Equal(28, answer)
 }
 

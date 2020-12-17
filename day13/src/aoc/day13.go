@@ -65,3 +65,33 @@ func CalculateMinutesToWait(timestamp int, busId int) int {
 	// Otherwise ceil and subtract
 	return int(math.Ceil(quotient))*int(busId) - timestamp
 }
+
+func FindFirstTimestampAllBusesSequential(input string) int {
+	busIDs := ParseBusIds(input)
+	possibleModulos := make(map[int][]int)
+	timestamp := 1
+	// Move in a sliding window
+	for i := 0; i < len(busIDs); i++ {
+		foundModulos := []int{}
+		timestampPoint := timestamp + i
+		for _, busID := range busIDs {
+			if (timestampPoint)%busID == 0 {
+				foundModulos = append(foundModulos, busID)
+			}
+		}
+		possibleModulos[timestampPoint] = foundModulos
+	}
+
+	// N items
+	// ts % item == 0
+	// (ts + 1) % item2 == 0
+	// (ts +2 ) % item3 == 0
+	// ...
+	// (ts + N - 1) % itemN == 0
+	return timestamp
+}
+
+type Pair struct {
+	ts    int
+	busID int
+}
