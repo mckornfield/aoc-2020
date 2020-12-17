@@ -43,6 +43,30 @@ func TestSumPt1(t *testing.T) {
 	assert.Equal(28884, invalidSum)
 }
 
+func TestSumPt2Sample(t *testing.T) {
+	assert := assert.New(t)
+	input := `class: 0-1 or 4-19
+row: 0-5 or 8-19
+seat: 0-13 or 16-19
+
+your ticket:
+11,12,13
+
+nearby tickets:
+3,9,18
+15,1,5
+5,14,9`
+	invalidSum := FilterRowsByValidInput(input)
+	assert.Equal(28884, invalidSum)
+}
+
+func TestSumPt2(t *testing.T) {
+	assert := assert.New(t)
+	input := ReadFile(t, "day16_puzzle.txt")
+	invalidSum := FilterRowsByValidInput(input)
+	assert.Equal(28884, invalidSum)
+}
+
 func ReadFile(t *testing.T, fileName string) string {
 
 	content, err := ioutil.ReadFile(fileName)
