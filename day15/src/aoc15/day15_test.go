@@ -42,6 +42,21 @@ func TestCountGamesPartOne(t *testing.T) {
 	spokenNumber := FindSpokenNumberForTurn(numbers, 2020)
 	assert.Equal(1194, spokenNumber)
 }
+
+func TestCountGamesPartTwoSample(t *testing.T) {
+	assert := assert.New(t)
+	numbers := "0,3,6"
+	spokenNumber := FindSpokenNumberForTurn(numbers, 30000000)
+	assert.Equal(175594, spokenNumber)
+}
+
+func TestCountGamesPartTwo(t *testing.T) {
+	assert := assert.New(t)
+	numbers := "6,13,1,15,2,0"
+	spokenNumber := FindSpokenNumberForTurn(numbers, 30000000)
+	assert.Equal(48710, spokenNumber)
+}
+
 func ReadFile(t *testing.T, fileName string) string {
 
 	content, err := ioutil.ReadFile(fileName)

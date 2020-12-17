@@ -23,23 +23,17 @@ func FindSpokenNumberForTurn(numbers string, turn int) int {
 	currentVal := 0
 	previousSpokenToTurnMap := make(map[int][]int)
 	for currentTurn := 1; currentTurn < turn+1; currentTurn++ {
-		// fmt.Print("timesSpokenMap ")
-		// fmt.Println(timesSpokenMap)
-		// fmt.Print("previousSpokenTurn ")
-		// fmt.Println(previousSpokenToTurnMap)
 		index := currentTurn - 1
 		if len(startingNumbersInts) > index {
 			currentVal = startingNumbersInts[index]
-			UpdateTimesSpokenMap(previousSpokenToTurnMap, currentVal, currentTurn)
 			// ENDGAME boys
 		} else if twoPreviousTurns, ok := previousSpokenToTurnMap[currentVal]; ok && len(twoPreviousTurns) > 1 {
 			// Some fancy turn comparison s**t
 			currentVal = twoPreviousTurns[1] - twoPreviousTurns[0]
-			UpdateTimesSpokenMap(previousSpokenToTurnMap, currentVal, currentTurn)
 		} else { // Nah this is BRAND NEW
 			currentVal = 0
-			UpdateTimesSpokenMap(previousSpokenToTurnMap, currentVal, currentTurn)
 		}
+		UpdateTimesSpokenMap(previousSpokenToTurnMap, currentVal, currentTurn)
 	}
 	return currentVal
 
