@@ -103,6 +103,7 @@ func LineToInts(line string) []int {
 	}
 	return vals
 }
+
 func FilterRowsByValidInput(input string) map[string][]int {
 	buildingValidators := true
 	rangeExp, err := regexp.Compile(exp)
@@ -132,6 +133,7 @@ func FilterRowsByValidInput(input string) map[string][]int {
 		}
 	}
 
+	// Find validators that satisfy columns
 	columnToValidatorName := make(map[string][]int)
 	for _, validator := range validators {
 		// Super slow, go over all the int columns
@@ -156,4 +158,75 @@ func FilterRowsByValidInput(input string) map[string][]int {
 	}
 
 	return columnToValidatorName
+}
+
+func contains(val int, values []int) (int, bool) {
+	for idx, valToMatch := range values {
+		if valToMatch == val {
+			return idx, true
+		}
+	}
+	return -1, false
+}
+
+func remove(slice []int, s int) []int {
+	return append(slice[:s], slice[s+1:]...)
+}
+
+func ValidatorToColumnMapping(validatorToColumns map[string][]int) map[string]int {
+	validatorToColumnsCopy := make(map[string][]int)
+	for k, elems := range validatorToColumns {
+		newElems := make([]int, len(elems))
+		copy(newElems, elems)
+		validatorToColumnsCopy[k] = newElems
+	}
+	validatorToColumnSingular := make(map[string]int)
+	// Crappy perf, but doesn't take too long
+	originalLen := len(validatorToColumns)
+	for len(validatorToColumnSingular) != originalLen {
+		// Find column with fewest matches
+		lowestColumnName := ""
+		lowestColumnCount := 4000
+		columnVal := -1
+		for validatorName, columns := range validatorToColumnsCopy {
+			columnCount := len(columns)
+			if columnCount < lowestColumnCount && columnCount > 0 {
+				lowestColumnName = validatorName
+				columnVal = columns[0]
+				lowestColumnCount = columnCount
+			}
+		}
+		// Now reduce
+		for validatorName, columns := range validatorToColumnsCopy {
+			if index, ok := contains(columnVal, columns); ok {
+				validatorToColumnsCopy[validatorName] = remove(columns, index)
+			}
+			if validatorName == lowestColumnName {
+				delete(validatorToColumnsCopy, validatorName)
+			}
+		}
+		validatorToColumnSingular[lowestColumnName] = columnVal
+	}
+	return validatorToColumnSingular
+}
+
+func GetAllDepartureColumnsAndSum(validatorToColumnSingular map[string]int, input string) int {
+	onTicketLine := false
+	var myTicketInfo []int
+	for _, line := range strings.Split(input, "\n") {
+		if onTicketLine {
+			myTicketInfo = LineToInts(line)
+			break
+		}
+		if line == "your ticket:" {
+			onTicketLine = true
+		}
+	}
+	product := 1
+	for name, column := range validatorToColumnSingular {
+		if strings.Contains(name, "departure") {
+			product = myTicketInfo[column] * product
+		}
+	}
+	return product
 }

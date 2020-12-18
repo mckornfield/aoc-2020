@@ -56,15 +56,20 @@ nearby tickets:
 3,9,18
 15,1,5
 5,14,9`
-	invalidSum := FilterRowsByValidInput(input)
-	assert.Equal(28884, invalidSum)
+	validatorsToColumns := FilterRowsByValidInput(input)
+	validatorToSingleColumn := ValidatorToColumnMapping(validatorsToColumns)
+	assert.Equal(map[string]int{
+		"class": 1, "row": 0, "seat": 2,
+	}, validatorToSingleColumn)
 }
 
 func TestSumPt2(t *testing.T) {
 	assert := assert.New(t)
 	input := ReadFile(t, "day16_puzzle.txt")
-	invalidSum := FilterRowsByValidInput(input)
-	assert.Equal(28884, invalidSum)
+	validatorsToColumns := FilterRowsByValidInput(input)
+	validatorToSingleColumn := ValidatorToColumnMapping(validatorsToColumns)
+	sum := GetAllDepartureColumnsAndSum(validatorToSingleColumn, input)
+	assert.Equal(1001849322119, sum)
 }
 
 func ReadFile(t *testing.T, fileName string) string {
