@@ -1,6 +1,7 @@
 package aoc18
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -70,6 +71,86 @@ func ParseAndSolveMathProblem(line string) ExecutionResult {
 	}
 	total = ExecuteOperation(&currentNumStr, currentOperation, total)
 	return ExecutionResult{endingIndex: len(line) - 1, total: total}
+}
+
+func FindClosingParenIndex(line string) int {
+	count := 0
+	for idx, c := range line {
+		if c == '(' {
+			count++
+		} else if c == ')' {
+			count--
+		}
+		if count == 0 {
+			return idx
+		}
+	}
+	panic("No matching paren found for " + line)
+}
+
+func FindOpenParenIndex(line string) int {
+	fmt.Println(line)
+	// Assume line is in correct order and must be reversed
+	count := 0
+	for idx := len(line) - 1; idx > -1; idx-- {
+		c := line[idx]
+		if c == '(' {
+			count++
+		} else if c == ')' {
+			count--
+		}
+		if count == 0 {
+			return idx
+		}
+	}
+	panic("No matching paren found for " + line)
+}
+
+func InsertParensAroundAddition(line string) string {
+	var sb strings.Builder
+	openParenIndices := make(map[int]bool)
+	closingParenIndices := make(map[int]bool)
+	// First determine where to insert parens
+
+	for idx, c := range line {
+		if (idx < len(line)-3) && line[idx+2:idx+3] == "+" {
+			if c == ')' {
+				openParenIndex := FindOpenParenIndex(line[:idx+1]) + 1
+				fmt.Println(openParenIndex)
+				openParenIndices[openParenIndex] = true
+			} else {
+				openParenIndices[idx] = true
+			}
+		}
+
+		if idx > 1 && line[idx-2:idx-1] == "+" {
+			if c == '(' {
+				// Go on a matchin paren hunt
+				closingParenIndex := FindClosingParenIndex(line[idx:]) + idx
+				closingParenIndices[closingParenIndex] = true
+			} else {
+				closingParenIndices[idx] = true
+			}
+		}
+
+	}
+
+	for idx, c := range line {
+		if _, ok := openParenIndices[idx]; ok {
+			sb.WriteRune('(')
+		}
+		sb.WriteRune(c)
+
+		if _, ok := closingParenIndices[idx]; ok {
+			sb.WriteRune(')')
+		}
+
+	}
+	return sb.String()
+}
+func ParseAndSolveMathProblemPt2(line string) int {
+	fixedLine := InsertParensAroundAddition(line)
+	return ParseAndSolveMathProblem(fixedLine).total
 }
 
 type ExecutionResult struct {
