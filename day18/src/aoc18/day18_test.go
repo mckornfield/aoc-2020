@@ -46,38 +46,47 @@ func TestPt1(t *testing.T) {
 
 }
 
-func TestPt2SampleNoParens(t *testing.T) {
+// 1 + 2 * 3 + 4 * 6
+// 3 * 7 * 6
+// 126
+func TestExecuteOperationsWithAdditionFirst(t *testing.T) {
 	assert := assert.New(t)
-
-	line := "1 + 2 * 3 + 4 * 5 + 6"
-
-	assert.Equal("(1 + 2) * (3 + 4) * (5 + 6)", InsertParensAroundAddition(line))
-	assert.Equal(231, ParseAndSolveMathProblemPt2(line))
+	operands := []int{1, 2, 3, 4, 6}
+	operators := []rune{'+', '*', '+', '*'}
+	assert.Equal(126, ExecuteOperationsWithAdditionFirst(operands, operators))
+	assert.Equal([]int{3, 7, 6}, PerformAdditionOnly(operands, operators))
 }
 
-func TestFindMatchingParen(t *testing.T) {
+// 5 * 3 + 1 + 2 * 3 + 4 * 6 * 7
+// 5 * 6 * 7 * 6 * 7
+
+func TestExecuteOperationsWithAdditionFirstSecondExample(t *testing.T) {
 	assert := assert.New(t)
-	line := "( (( ))) ) )"
-	assert.Equal(7, FindClosingParenIndex(line))
+	operands := []int{5, 3, 1, 2, 3, 4, 6, 7}
+	operators := []rune{'*', '+', '+', '*', '+', '*', '*'}
+	assert.Equal(8820, ExecuteOperationsWithAdditionFirst(operands, operators))
+	assert.Equal([]int{5, 6, 7, 6, 7}, PerformAdditionOnly(operands, operators))
 }
 
-func TestFindMatchingExperiment(t *testing.T) {
-	assert := assert.New(t)
-
-	assert.Equal(15, FindOpenParenIndex("((2 + 4 * 9) * (6 + 9 * 8 + 6)"))
-}
-func TestPt2SampleWithParens(t *testing.T) {
+func TestPt2SampleWithAdditionFirst(t *testing.T) {
 	assert := assert.New(t)
 
 	line := "2 * 3 + (4 * 5)"
-	assert.Equal("2 * (3 + (4 * 5))", InsertParensAroundAddition(line))
 	assert.Equal(46, ParseAndSolveMathProblemPt2(line))
 	assert.Equal(1445, ParseAndSolveMathProblemPt2("5 + (8 * 3 + 9 + 3 * 4 * 3)"))
 	assert.Equal(669060, ParseAndSolveMathProblemPt2("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))"))
 
 	line = "((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2"
-	assert.Equal("(((2 + 4) * 9) * ((6 + 9) * (8 + 6)) + 6) + 2)) + 4) * 2", InsertParensAroundAddition(line))
 	assert.Equal(23340, ParseAndSolveMathProblemPt2(line))
+}
+
+func TestPt2(t *testing.T) {
+	assert := assert.New(t)
+
+	lines := ReadFile(t, "day18_puzzle.txt")
+
+	assert.Equal(36382392389406, ParseAndSolveMathProblemPt2(lines))
+
 }
 
 func ReadFile(t *testing.T, fileName string) string {
