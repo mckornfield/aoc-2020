@@ -79,7 +79,7 @@ aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba`
 	assert.Equal(3, rulesMatchingRuleZero)
 }
 
-func TestSampleInputTwo(t *testing.T) {
+func TestSampleInputTwoPartTwo(t *testing.T) {
 	assert := assert.New(t)
 	input := `42: 9 14 | 10 1
 9: 14 27 | 1 26
@@ -128,7 +128,7 @@ aaaabbaaaabbaaa
 aaaabbaabbaaaaaaabbbabbbaaabbaabaaa
 babaaabbbaaabaababbaabababaaab
 aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba`
-	rulesMatchingRuleZero := GetRuleZeroMatches(input)
+	rulesMatchingRuleZero := GetRuleZeroMatches(ReplaceLinesForPartTwo(input))
 	assert.Equal(3, rulesMatchingRuleZero)
 }
 

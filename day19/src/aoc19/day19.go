@@ -85,3 +85,7 @@ type Rule interface {
 	// This returns whether or not it matches the string, and how far it advanced
 	matches(map[string]Rule, string, int) (bool, int)
 }
+
+func ReplaceLinesForPartTwo(lines string) string {
+	return strings.Replace(strings.Replace(lines, "8: 42", "8: 42 | 42 8", 1), "11: 42 31", "11: 42 31 | 42 11 31", 1)
+}
